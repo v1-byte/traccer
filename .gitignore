@@ -1,0 +1,10 @@
+node_modules/
+android/
+ios/
+.idea/
+*.log
+.DS_Store
+dist/
+.capacitor/
+package-lock.json
+yarn.lock
