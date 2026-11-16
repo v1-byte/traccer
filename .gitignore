@@ -8,3 +8,5 @@ dist/
 .capacitor/
 package-lock.json
 yarn.lock
+android/**/build/
+android/.gradle/
