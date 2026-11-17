@@ -81,5 +81,5 @@ Capacitor biasanya menambahkan otomatis saat plugin dipasang; cek sekali setelah
 
 ## Versi
 
-- App: 1.5.0  
+- App: 1.5.1  
 - UI: HTML dark amber (Frostbyte / HM Tracker)

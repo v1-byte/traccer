@@ -447,7 +447,7 @@ function cwm(){
   if(cv.width!==w*r||cv.height!==h*r){cv.width=w*r;cv.height=h*r}
   cv.getContext("2d").clearRect(0,0,cv.width,cv.height);
   try{
-    var c=cfg(u)?calc(u):{c:0,b:0,used:0,rem:(u.interval||200),pct:0,st:"ok"};
+    var c=cfg(u)?calc(u):{c:0,b:0,used:0,rem:(u.interval||200),pct:0,st:"ready"};
     wm(cv,u,c,Date.now(),true);
     if(a){
       var z=un(u);
@@ -609,16 +609,16 @@ function wm(c,u,m,t,full){
   var k=Math.min(W,H)/400*WSZ;
   var d=new Date(t);
   var tpl=S.wmTpl||"pro", showGps=S.wmGps!==false;
-  var st=m.st||"ok", stCol={ok:"#34C759",wa:"#FFB800",er:"#FF453A"}[st]||"#FFB020";
-  var stLb={ok:"LANCAR",wa:"PERINGATAN",er:"WAJIB SERVIS"}[st]||"LANCAR";
+  var st=m.st||"ok", stCol={ready:"#8B95A8",ok:"#34C759",wa:"#FFB800",er:"#FF453A"}[st]||"#FFB020";
+  var stLb={ready:"SIAP",ok:"LANCAR",wa:"PERINGATAN",er:"WAJIB SERVIS"}[st]||"SIAP";
   var timeStr=d.toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}).replace(".",":");
   var dateStr=d.toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"short",year:"numeric"});
   var sh=S.wmShow||{};
   var locParts=[];
-  if(sh.loc!==false) locParts.push(u.loc||"Lokasi");
+  if(sh.loc!==false && u.loc) locParts.push(u.loc);
   if(showGps&&geo) locParts.push(geo.la.toFixed(5)+", "+geo.lo.toFixed(5));
   var locLine=locParts.join("  ·  ");
-  var operator=u.operator||(S.profile&&S.profile.name)||"-";
+  var operator=u.operator||(S.profile&&S.profile.name)||"";
   var unitName=(u.name||"—")+(u.type?" · "+u.type:"");
   var z=un(u);
 
@@ -719,8 +719,8 @@ function wm(c,u,m,t,full){
   }
 
   var rows=[];
-  if(sh.unit!==false) rows.push(["Unit", u.name||"—", 12]);
-  if(sh.op!==false)   rows.push(["Operator", operator, 11.5]);
+  if(sh.unit!==false && u.name) rows.push(["Unit", unitName, 12]);
+  if(sh.op!==false && operator) rows.push(["Operator", operator, 11.5]);
   var hasLoc=!!locLine;
   var hmS=f1(m.c)+" "+z, usS=f1(m.used)+" "+z;
   var smr="SMR "+f1(m.b)+"  ·  Next Maintenance "+f1((m.b||0)+(u.interval||0))+" "+z;
