@@ -16,17 +16,23 @@ android {
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
-    signingConfigs {
-        release {
-            storeFile file(System.getenv("HM_KEYSTORE_PATH") ?: "../../../../HM_Trecer_build/hm-trecer-release.jks")
-            storePassword System.getenv("HM_KEYSTORE_PASSWORD") ?: "HM_Trecer_Release_2026!"
-            keyAlias System.getenv("HM_KEY_ALIAS") ?: "hm-trecer"
-            keyPassword System.getenv("HM_KEY_PASSWORD") ?: "HM_Trecer_Release_2026!"
+    def hasReleaseSigning = ["HM_KEYSTORE_PATH", "HM_KEYSTORE_PASSWORD", "HM_KEY_ALIAS", "HM_KEY_PASSWORD"]
+        .every { System.getenv(it) }
+    if (hasReleaseSigning) {
+        signingConfigs {
+            release {
+                storeFile file(System.getenv("HM_KEYSTORE_PATH"))
+                storePassword System.getenv("HM_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("HM_KEY_ALIAS")
+                keyPassword System.getenv("HM_KEY_PASSWORD")
+            }
         }
     }
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            if (hasReleaseSigning) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
